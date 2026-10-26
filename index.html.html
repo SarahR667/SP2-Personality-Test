@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¿Cuáles son tus tres animales espirituales?</title>
+<style>
+:root { --ink:#202a44; --blue:#2456a6; --pale:#eef4ff; --gold:#f6c85f; --line:#d8dfeb; --white:#fff; }
+*{box-sizing:border-box}
+body{margin:0;background:#f4f7fb;color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.5}
+main{max-width:850px;margin:0 auto;padding:22px 14px 48px}
+header{background:var(--blue);color:white;border-radius:18px;padding:26px 24px;margin-bottom:20px}
+header h1{font-size:clamp(1.7rem,4vw,2.5rem);line-height:1.12;margin:0 0 10px}
+header p{margin:0}
+.note{font-size:.92rem;opacity:.94}
+.panel{background:white;border:1px solid var(--line);border-radius:15px;padding:20px;margin:16px 0}
+.progress-wrap{height:9px;background:#e8edf5;border-radius:9px;overflow:hidden;margin:12px 0 5px}
+.progress{height:100%;width:0;background:var(--gold);transition:width .2s}
+.qnum{font-size:.82rem;text-transform:uppercase;letter-spacing:.07em;color:#53647f;font-weight:bold}
+h2{font-size:1.25rem;margin:6px 0 15px}
+.options{display:grid;gap:9px}
+.option{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);border-radius:11px;padding:12px;cursor:pointer;background:#fff}
+.option:hover{background:var(--pale);border-color:#9db8e6}
+.option:has(input:checked){background:var(--pale);border-color:var(--blue);box-shadow:0 0 0 1px var(--blue)}
+.option input{margin-top:5px;accent-color:var(--blue);flex-shrink:0}
+button{border:0;border-radius:10px;padding:12px 18px;font-size:1rem;font-weight:bold;cursor:pointer}
+.primary{background:var(--blue);color:white}
+.secondary{background:#e9eef7;color:var(--ink)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.nav{display:flex;gap:10px;justify-content:space-between;margin-top:18px}
+.nav button{flex:1}
+.small{font-size:.9rem;color:#59677d}
+.error{color:#a32020;font-weight:bold;min-height:1.4em}
+#results{display:none}
+.animal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.animal{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+.animal .emoji{font-size:2.5rem}
+.animal h3{margin:5px 0}
+.rank{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:#53647f;font-weight:bold}
+.score{display:inline-block;background:#fff2c9;padding:3px 8px;border-radius:20px;font-size:.85rem;font-weight:bold}
+.reflection li{margin:7px 0}
+footer{text-align:center;color:#65728a;font-size:.8rem;margin-top:24px}
+@media(max-width:520px){main{padding:12px 10px 32px}header{padding:22px 18px}.panel{padding:16px}.nav button{padding:11px 8px}}
+@media print{body{background:white}.no-print,header .note{display:none!important}.panel,header{break-inside:avoid}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>¿Cuáles son tus tres animales espirituales?</h1>
+  <p>Un test de personalidad · Español 2</p>
+  <p class="note" style="margin-top:10px">Instrucciones: Lee cada pregunta y escoge la respuesta que mejor te describe. No hay respuestas correctas ni incorrectas. Contesta las 15 preguntas para descubrir tus tres animales.</p>
+</header>
+
+<section id="quiz">
+  <div class="panel">
+    <strong id="progressText">Pregunta 1 de 15</strong>
+    <div class="progress-wrap" aria-label="Progreso"><div class="progress" id="progress"></div></div>
+    <p class="small">Escoge una respuesta por pregunta.</p>
+  </div>
+  <div id="questionPanel" class="panel" aria-live="polite"></div>
+  <div class="nav no-print">
+    <button id="prev" class="secondary" type="button">← Anterior</button>
+    <button id="next" class="primary" type="button">Siguiente →</button>
+  </div>
+  <p id="error" class="error" role="alert"></p>
+</section>
+
+<section id="results">
+  <div class="panel">
+    <h2>¡Estos son tus tres animales!</h2>
+    <p>Los resultados muestran los tres animales con más puntos según tus respuestas. Si hay un empate en el tercer puesto, verás todos los animales empatados.</p>
+    <div id="animalResults" class="animal-grid"></div>
+  </div>
+  <div class="panel reflection">
+    <h2>Después del test</h2>
+    <ol>
+      <li>¿Cuáles son tus tres animales espirituales?</li>
+      <li>¿Estás de acuerdo con los resultados? ¿Por qué?</li>
+      <li>¿Cuál de tus animales te representa mejor?</li>
+      <li>¿Qué características tienes en común con ese animal?</li>
+      <li>¿Qué animal representa mejor a tu mejor amigo/a? ¿Por qué?</li>
+    </ol>
+    <p><strong>Extensión:</strong> Escribe 5–7 oraciones sobre tu personalidad. Incluye tus tres animales, tres adjetivos y dos frases con <em>me gusta</em>, <em>prefiero</em> o <em>soy</em>.</p>
+    <p class="small">Este test es una actividad recreativa para practicar español, no una evaluación psicológica.</p>
+    <div class="no-print" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+      <button class="primary" onclick="window.print()">Imprimir / Guardar resultados en PDF</button>
+      <button class="secondary" id="restart" type="button">Volver a empezar</button>
+    </div>
+  </div>
+</section>
+<footer>Actividad de clase · Español 2</footer>
+</main>
+<script>
+const animals = {
+  zorro:{name:"El zorro",emoji:"🦊",traits:"Eres curioso/a, ingenioso/a y aventurero/a. Te gusta explorar, resolver problemas y probar cosas nuevas."},
+  delfin:{name:"El delfín",emoji:"🐬",traits:"Eres sociable, alegre y comunicativo/a. Te gusta divertirte, conocer personas y compartir buenos momentos."},
+  buho:{name:"El búho",emoji:"🦉",traits:"Eres observador/a, inteligente y reflexivo/a. Te gusta aprender, pensar antes de actuar y comprender el mundo."},
+  oso:{name:"El oso",emoji:"🐻",traits:"Eres tranquilo/a, paciente y fuerte. Valoras la comodidad, la seguridad y tener tiempo para ti."},
+  gato:{name:"El gato",emoji:"🐱",traits:"Eres independiente, creativo/a y original. Te gusta tomar tus propias decisiones y expresar tu personalidad."},
+  lobo:{name:"El lobo",emoji:"🐺",traits:"Eres leal, protector/a y colaborador/a. Valoras a tu familia y amigos y te gusta apoyar a tu grupo."}
+};
+// Each option awards one point to exactly one animal.
+const questions = [
+ {q:"Es sábado y no tienes planes. ¿Qué prefieres hacer?",a:[
+ ["Explorar un lugar nuevo.","zorro"],["Pasar tiempo con mis amigos.","delfin"],["Leer o aprender algo nuevo.","buho"],["Quedarme en casa y descansar.","oso"],["Hacer algo creativo.","gato"],["Salir a caminar con mi familia.","lobo"]]},
+ {q:"¿Cómo eres normalmente?",a:[
+ ["Curioso/a y aventurero/a.","zorro"],["Divertido/a y sociable.","delfin"],["Inteligente y observador/a.","buho"],["Tranquilo/a y paciente.","oso"],["Independiente y creativo/a.","gato"],["Leal y cariñoso/a.","lobo"]]},
+ {q:"Cuando tienes un problema, ¿qué haces?",a:[
+ ["Busco una solución rápida.","zorro"],["Hablo con alguien y pido ayuda.","delfin"],["Pienso mucho antes de decidir.","buho"],["Tengo paciencia y espero.","oso"],["Busco una solución diferente.","gato"],["Ayudo a mis amigos y trabajamos juntos.","lobo"]]},
+ {q:"¿Qué actividad prefieres en la escuela?",a:[
+ ["Hacer un proyecto emocionante.","zorro"],["Trabajar en grupo y conversar.","delfin"],["Investigar un tema interesante.","buho"],["Trabajar a mi propio ritmo.","oso"],["Dibujar o diseñar algo.","gato"],["Ayudar a mis compañeros.","lobo"]]},
+ {q:"¿Qué lugar prefieres visitar?",a:[
+ ["Una montaña con senderos.","zorro"],["Una playa con agua azul.","delfin"],["Una biblioteca o un museo.","buho"],["Un bosque tranquilo.","oso"],["Una ciudad con tiendas y cafés.","gato"],["Un parque con mis amigos.","lobo"]]},
+ {q:"En una fiesta, normalmente...",a:[
+ ["Hablo con personas nuevas.","zorro"],["Hago reír a todos.","delfin"],["Observo y escucho las conversaciones.","buho"],["Busco un lugar tranquilo.","oso"],["Hablo con algunos amigos y hago lo que quiero.","gato"],["Estoy con mi grupo de amigos.","lobo"]]},
+ {q:"¿Qué haces cuando estás triste?",a:[
+ ["Salgo y hago algo diferente.","zorro"],["Hablo con alguien que me hace reír.","delfin"],["Pienso en mis sentimientos.","buho"],["Descanso y me doy tiempo.","oso"],["Escucho música o hago algo creativo.","gato"],["Busco a una persona de confianza.","lobo"]]},
+ {q:"¿Qué es más importante para ti?",a:[
+ ["La libertad y la aventura.","zorro"],["La amistad y la diversión.","delfin"],["El conocimiento y la sabiduría.","buho"],["La paz y la seguridad.","oso"],["La independencia y la creatividad.","gato"],["La familia y la lealtad.","lobo"]]},
+ {q:"Si puedes aprender una habilidad nueva, ¿cuál escoges?",a:[
+ ["Escalar una montaña.","zorro"],["Practicar un deporte acuático.","delfin"],["Aprender otro idioma.","buho"],["Cocinar una comida especial.","oso"],["Tocar un instrumento o pintar.","gato"],["Aprender un deporte con mi equipo.","lobo"]]},
+ {q:"¿Cómo describes tu fin de semana ideal?",a:[
+ ["Una aventura inesperada.","zorro"],["Un día lleno de risas.","delfin"],["Un día para leer y aprender.","buho"],["Un día relajado en casa.","oso"],["Un día para hacer mis propios planes.","gato"],["Un día con mis amigos o mi familia.","lobo"]]},
+ {q:"Cuando trabajas en equipo, tú...",a:[
+ ["Tienes ideas nuevas y tomas la iniciativa.","zorro"],["Ayudas a que todos se diviertan.","delfin"],["Analizas la información.","buho"],["Mantienes la calma.","oso"],["Prefieres hacer tu parte independientemente.","gato"],["Apoyas al equipo y colaboras.","lobo"]]},
+ {q:"¿Qué tipo de música prefieres?",a:[
+ ["Música energética para una aventura.","zorro"],["Música alegre para bailar.","delfin"],["Música tranquila para concentrarme.","buho"],["Música suave para relajarme.","oso"],["Música original que expresa emociones.","gato"],["Música que me recuerda a mis amigos.","lobo"]]},
+ {q:"Si alguien tiene una opinión diferente, tú...",a:[
+ ["Defiendo mi opinión con confianza.","zorro"],["Escucho y trato de entender.","delfin"],["Pienso en las razones de cada persona.","buho"],["Mantengo la calma y respeto a todos.","oso"],["Tengo mi propia opinión, aunque sea diferente.","gato"],["Busco una solución que funcione para todos.","lobo"]]},
+ {q:"¿Cuál de estas frases te representa mejor?",a:[
+ ["Me encanta descubrir cosas nuevas.","zorro"],["¡La vida es más divertida con amigos!","delfin"],["Siempre quiero saber por qué.","buho"],["A veces necesito paz y tranquilidad.","oso"],["Me gusta ser diferente.","gato"],["Las personas que quiero son muy importantes.","lobo"]]},
+ {q:"¿Qué superpoder escogerías?",a:[
+ ["Explorar cualquier lugar sin miedo.","zorro"],["Hablar con todos y hacer amigos fácilmente.","delfin"],["Saber la respuesta a cualquier pregunta.","buho"],["Tener una fuerza increíble para proteger a otros.","oso"],["Ser invisible cuando quiero estar a solas.","gato"],["Entender y ayudar a las personas que quiero.","lobo"]]}
+];
+let current = 0;
+const answers = Array(questions.length).fill(null);
+const panel = document.getElementById("questionPanel");
+const prev = document.getElementById("prev");
+const next = document.getElementById("next");
+function renderQuestion(){
+ const q=questions[current];
+ document.getElementById("progressText").textContent=`Pregunta ${current+1} de ${questions.length}`;
+ document.getElementById("progress").style.width=`${(current+1)/questions.length*100}%`;
+ panel.innerHTML=`<div class="qnum">Pregunta ${current+1}</div><h2>${q.q}</h2><div class="options">${q.a.map((opt,i)=>`<label class="option"><input type="radio" name="answer" value="${i}" ${answers[current]===i?"checked":""}><span>${String.fromCharCode(65+i)}. ${opt[0]}</span></label>`).join("")}</div>`;
+ panel.querySelectorAll('input[name="answer"]').forEach(el=>el.addEventListener("change",e=>{answers[current]=Number(e.target.value);document.getElementById("error").textContent="";updateButtons();}));
+ prev.disabled=current===0;
+ next.textContent=current===questions.length-1?"Ver mis resultados":"Siguiente →";
+ updateButtons();
+}
+function updateButtons(){prev.disabled=current===0;next.disabled=answers[current]===null;}
+prev.addEventListener("click",()=>{if(current>0){current--;document.getElementById("error").textContent="";renderQuestion();window.scrollTo({top:0,behavior:"smooth"});}});
+next.addEventListener("click",()=>{
+ if(answers[current]===null){document.getElementById("error").textContent="Escoge una respuesta antes de continuar.";return;}
+ if(current<questions.length-1){current++;renderQuestion();window.scrollTo({top:0,behavior:"smooth"});}
+ else showResults();
+});
+function showResults(){
+ const scores={zorro:0,delfin:0,buho:0,oso:0,gato:0,lobo:0};
+ answers.forEach((choice,qi)=>{const animal=questions[qi].a[choice][1];scores[animal]++;});
+ const sorted=Object.keys(scores).sort((a,b)=>scores[b]-scores[a] || Object.keys(animals).indexOf(a)-Object.keys(animals).indexOf(b));
+ const thirdScore=scores[sorted[2]];
+ const winners=sorted.filter((key,i)=>i<3 || scores[key]===thirdScore);
+ const results=document.getElementById("animalResults");
+ results.innerHTML=winners.map((key,i)=>`<article class="animal"><div class="rank">${i<3?"Animal destacado":"Empate en el tercer puesto"}</div><div class="emoji" aria-hidden="true">${animals[key].emoji}</div><h3>${animals[key].name}</h3><p>${animals[key].traits}</p><span class="score">${scores[key]} ${scores[key]===1?"punto":"puntos"}</span></article>`).join("");
+ document.getElementById("quiz").style.display="none";
+ document.getElementById("results").style.display="block";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+document.getElementById("restart").addEventListener("click",()=>{
+ answers.fill(null);current=0;document.getElementById("results").style.display="none";document.getElementById("quiz").style.display="block";document.getElementById("error").textContent="";renderQuestion();window.scrollTo({top:0,behavior:"smooth"});
+});
+renderQuestion();
+</script>
+</body>
+</html>
